@@ -1,0 +1,24 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.bg-color{
+    background-color:  #563d7c;
+}
+.text-color{
+    color: aliceblue;
+}
+.search{
+    padding-right: 150px;
+}
+.ol-overviewmap{
+    margin-bottom: 30px;
+}
+.ol-attribution{
+    visibility: hidden;
+}
+.ol-mouse-position{
+    margin-right: 40px;;
+    color: #563d7c;
+    font-weight: bold;
+}
