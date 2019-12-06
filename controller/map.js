@@ -550,8 +550,8 @@ window.onload = function(){
         }),
         view: new ol.View({
 		    projection: 'EPSG:4326',                //projection: 'EPSG:4326', //Aqui é definido qual o tipo de Datum - Modelo terrestre
-            center: [-43.120243549346924,    -22.895044312909466],
-            zoom: 19,
+            center: [longitudeAtual, latitudeAtual], //center: [-43.120243549346924,    -22.895044312909466],
+            zoom: 18,
             minZoom: 3
         })
       });
