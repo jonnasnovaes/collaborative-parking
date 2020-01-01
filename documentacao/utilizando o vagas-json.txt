@@ -1,0 +1,458 @@
+var json = {
+      "type": "FeatureCollection",
+      
+       'crs': {
+        'type': 'name',
+        'properties': {
+          'name': 'EPSG: 4674'
+          }
+      },
+      "features": [
+          {
+              "type": "Feature",
+              "properties": {
+                "name": "urn:ogc:def:crs:EPSG::4674"
+              },
+              "geometry": {
+                  "type": "Polygon", //Trecho que define o perímetro das vagas
+                  "coordinates": [
+                      [
+                          [
+                              -43.120150,//-43.120176,
+                              -22.895164//-22.895190 //SUPERIOR ESQUERDO
+                          ],
+                          [
+                              //-43.120176, -22.895402 
+                              -43.120176,
+                              -22.895430 //INFERIOR ESQUERDO
+                          ],
+                          [
+                              //-43.119903, -22.895402 
+                              -43.119903,
+                              -22.895456 //INFERIOR DIREITO
+                          ],
+                          [
+                              -43.119877,//-43.119903,
+                              -22.895190 //SUPERIOR DIREITO
+                              //-43.119903, -22.895430
+                          ]
+                      ]
+                  ]
+              }
+          },
+          //Trecho que define a 1 fileira
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201312,
+                      -22.8952000
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201074,
+                      //-22.8952000
+                      -22.8952023
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200836,
+                      -22.8952046
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200598,
+                      -22.8952069
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200360,
+                      -22.8952092
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200122,
+                      -22.8952115
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199884,
+                      -22.8952138
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199646,
+                      -22.8952161
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199408,
+                      -22.8952184
+                  ]
+              }
+          },
+          //Trecho que define a 2 fileira
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201406,
+                      -22.8952718 //-22.8952318
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201211,
+                      -22.8952741//-22.8952718
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201016,
+                      -22.8952764//-22.8952718
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200821,
+                      -22.8952787//-22.8952718
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200626,
+                      -22.8952810//-22.8952718
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200431,
+                      -22.8952833//-22.8952718
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200236,
+                      -22.8952856//-22.8952718
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200041,
+                      -22.8952879//-22.8952718
+                  ]
+              }
+          },
+          //Trecho que define a 3 fileira
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201406,
+                      -22.8953025//-22.8953025
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201211,
+                      -22.8953048//-22.8953025
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201016,
+                      -22.8953071//-22.8953025
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200821,
+                      -22.8953094//-22.8953025
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200626,
+                      -22.8953117//-22.8953025
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200431,
+                      -22.8953140//-22.8953025
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200236,
+                      -22.8953163//-22.8953025
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200041,
+                      -22.8953186//-22.8953025
+                  ]
+              }
+          },
+          //Trecho que define a lateral
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199177,//-43.1199177
+                      -22.8952528
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199200,//-43.1199177
+                      -22.8952725
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199223,
+                      -22.8952922
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199246,
+                      -22.8953119
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199292,
+                      -22.8953692
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1199315,
+                      -22.8953859
+                  ]
+              }
+          },
+          //Trecho que define as vagas de deficientes
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201467,
+                      -22.8954014
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1201182,
+                      -22.8954037
+                  ]
+              }
+          },
+          {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      -43.1200897,
+                      -22.8954060
+                  ]
+              }
+          },
+      ]
+  };
+
+
+var vectorSource = new ol.source.Vector({
+        features: (new ol.format.GeoJSON()).readFeatures(json)
+      });
+
+      //vectorSource.addFeature(new ol.Feature(new ol.geom.Circle([5e6, 7e6], 1e6)));
+
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+        style: styleFunction
+      });
+
+      var map = new ol.Map({
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          vectorLayer
+        ],
+        target: 'map',
+        controls: ol.control.defaults({
+          attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+            collapsible: false
+          }),
+        
+        }),
+        view: new ol.View({
+		    projection: 'EPSG:4326',                //projection: 'EPSG:4326', //Aqui é definido qual o tipo de Datum - Modelo terrestre
+            center: [longitudeAtual, latitudeAtual], //center: [-43.120243549346924,    -22.895044312909466],
+            zoom: 18,
+            minZoom: 3
+        })
+      });

@@ -1,0 +1,3 @@
+vagas.json - Contém a latitude e longitude das vagas mapeadas no formato GeoJSON.
+
+vagas.shp  - Contém Contém a latitude e longitude das vagas mapeadas no formato ShapeFile (PostGIS).
