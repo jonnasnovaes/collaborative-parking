@@ -3,7 +3,8 @@
     padding: 0px;
 }
 .bg-color{
-    background-color:  #563d7c;
+    /*background-color:  #563d7c;*/
+    background-color:  #4590bb;
 }
 .text-color{
     color: aliceblue;
@@ -21,4 +22,17 @@
     margin-right: 40px;;
     color: #563d7c;
     font-weight: bold;
+}
+
+#endereco{
+    margin-right: 100%;
+}
+
+
+@media screen and (min-width: 300px) and (max-width: 600px) {
+
+    #endereco{
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
 }
