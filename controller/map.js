@@ -80,7 +80,7 @@ function requisitaGeoserver(map, styleFunction) {
   });
 
   map.addLayer(vector);
-  
+
 }
 
 //======================================================================//
@@ -88,7 +88,7 @@ function requisitaGeoserver(map, styleFunction) {
 window.onload = function () {
 
   var map;
-  
+
   var longitudeAtual;
   var latitudeAtual;
 
@@ -103,10 +103,10 @@ window.onload = function () {
 
       longitudeAtual = position.coords.longitude;
       latitudeAtual = position.coords.latitude;
-      
-      
-      if(longitudeAtual != undefined && latitudeAtual != undefined){
-        
+
+
+      if (longitudeAtual != undefined && latitudeAtual != undefined) {
+
         //CRIA O OBJETO QUE REPRESENTARÁ AS VAGAS E A POSIÇÃO ATUAL
         var image = new ol.style.Circle({
           radius: 5,
@@ -120,7 +120,7 @@ window.onload = function () {
             width: 1
           }) //Seta a cor da borda 
         });
-        
+
         //O TRECHO ABAIXO TRATA A ESTILIZAÇÃO PARA CADA TIPO DE GEOMETRIA
         var styles = {
           'Point': new ol.style.Style({
@@ -186,13 +186,13 @@ window.onload = function () {
             })
           })
         };
-        
+
         var styleFunction = function (feature) {
           return styles[feature.getGeometry().getType()];
         };
-        
+
         //=====================================================================//
-        
+
         //O CÓDIGO CRIA O OBJETO MAP PARA SER GERENCIADO
         map = new ol.Map({
           layers: [
@@ -205,103 +205,107 @@ window.onload = function () {
             attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
               collapsible: false
             }),
-            
+
           }),
           view: new ol.View({
             projection: 'EPSG:4326', //projection: 'EPSG:4326', //Aqui é definido qual o tipo de Datum - Modelo terrestre
             //center: [-43.120243549346924, -22.895044312909466],
             center: [longitudeAtual, latitudeAtual],
-      zoom: 18,
-      minZoom: 3
-    })
-  });
-  
-  //BLOCO QUE ADICIONA OS CONTROLADORES DO MAPA
-  map.addControl(new ol.control.MousePosition({
-    displayProjection: 'EPSG:4326'
-  }));
-  map.addControl(new ol.control.ZoomSlider());
-  map.addControl(new ol.control.FullScreen());
-  //map.addControl(new ol.control.OverviewMap());
-  //map.addControl(new ol.control.ScaleLine());
-  //map.addControl(new ol.control.Attribution());
-  
-  //ADICIONA NO MAPA O TAMANHO EM PORCENTAGEM
-  $("#map").attr('Style', 'height: ' + '100' + '%; width: ' + '100' + '%;');
-
-  //INSERE O BOTÃO DE POSICIONAR O MAPA NA POSIÇÃO ATUAL
-$(".ol-full-screen").css("background", "none");
-//$("#pa").remove();
-$(".ol-full-screen").append("<button id='pa' class='navbar-brand mt-2'>"+
-"<img id='pa' width='20' height='20' src='assets/ico-localizacao-grey.svg' />"+
-"</button>");
-
-//AO CLICAR NO BOTÃO POSICIONA O MAPA NA SUA LOCALIZAÇÃO ATUAL
-$("#pa").click(function(){
-
-  let view = new ol.View({
-    projection: 'EPSG:4326', 
-    //center: [-43.120243549346924, -22.895044312909466],
-    center: [longitudeAtual, latitudeAtual],
-    zoom: 18,
-    minZoom: 3
-  });
-
-  map.setView(view);
-
-});
-
-  dadosLocalizacao(map, longitudeAtual, latitudeAtual);
-  requisitaGeoserver(map, styleFunction);
-}
-});
-
-$("#localizar").click(function (){
-  var endereco = $("#endereco").val();
-  var tamString = endereco.length;
-  
-  if(tamString > 0){
-    
-    url = "https://nominatim.openstreetmap.org/search/" + endereco + "?format=json";
-    
-    $.getJSON(url, function(response){
-      let arrayEndereco = response;
-      
-      let latitude = parseFloat(arrayEndereco[0].lat);
-      let longitude = parseFloat(arrayEndereco[0].lon);
-      
-         let view = new ol.View({
-           projection: 'EPSG:4326', 
-          //center: [-43.120243549346924, -22.895044312909466],
-          center: [longitude, latitude],
-          zoom: 18,
-          minZoom: 3
+            zoom: 18,
+            minZoom: 3
+          })
         });
 
-        map.setView(view);
+        //BLOCO QUE ADICIONA OS CONTROLADORES DO MAPA
+        map.addControl(new ol.control.ZoomSlider());
+        map.addControl(new ol.control.FullScreen());
+        //map.addControl(new ol.control.OverviewMap());
+        //map.addControl(new ol.control.ScaleLine());
+        //map.addControl(new ol.control.Attribution());
+        /*map.addControl(new ol.control.MousePosition({
+          displayProjection: 'EPSG:4326'
+        }));*/
+        
+        //ADICIONA NO MAPA O TAMANHO EM PORCENTAGEM
+        $("#map").attr('Style', 'height: ' + '100' + '%; width: ' + '100' + '%;');
 
-      }, () => {
-        alert("Não foi possivel carregar a localização, tenta novamente mais tarde !");
-      });
+        //INSERE O BOTÃO DE POSICIONAR O MAPA NA POSIÇÃO ATUAL
+        $(".ol-full-screen").css("background", "none");
+        //$("#pa").remove();
+        $(".ol-full-screen").append("<button id='pa' class='navbar-brand mt-2'>" +
+          "<img id='pa' width='20' height='20' src='assets/ico-localizacao-grey.svg' />" +
+          "</button>");
 
-    }
-    else{
-      alert("O campo de localização não pode ser NULO, insira uma localização válida !");
-    }
+        //AO CLICAR NO BOTÃO POSICIONA O MAPA NA SUA LOCALIZAÇÃO ATUAL
+        $("#pa").click(function () {
 
-    $("#endereco").val("");
-  });
+          let view = new ol.View({
+            projection: 'EPSG:4326',
+            //center: [-43.120243549346924, -22.895044312909466],
+            center: [longitudeAtual, latitudeAtual],
+            zoom: 18,
+            minZoom: 3
+          });
 
-  $(document).keypress(function(e) {
-    if (e.which == 13) {
-      $("#localizar").click();
-    }
-  });
+          map.setView(view);
 
-  
-} 
-else {
-  alert('Infelizmente seu navegador não suporta geolocalização.');
+        });
+
+        dadosLocalizacao(map, longitudeAtual, latitudeAtual);
+        requisitaGeoserver(map, styleFunction);
+      }
+    });
+
+    $("#localizar").click(function () {
+      var endereco = $("#endereco").val();
+      var tamString = endereco.length;
+
+      if (tamString > 0) {
+
+        url = "https://nominatim.openstreetmap.org/search/" + endereco + "?format=json";
+
+        $.getJSON(url, function (response) {
+          let arrayEndereco = response;
+
+          if (arrayEndereco.length != 0) {
+
+            let latitude = parseFloat(arrayEndereco[0].lat);
+            let longitude = parseFloat(arrayEndereco[0].lon);
+
+            let view = new ol.View({
+              projection: 'EPSG:4326',
+              //center: [-43.120243549346924, -22.895044312909466],
+              center: [longitude, latitude],
+              zoom: 18,
+              minZoom: 3
+            });
+
+            map.setView(view);
+          } 
+          else {
+            alert("Localização inexistente ou informada de maneira incorreta.");
+          }
+        }, () => {
+          alert("Não foi possivel carregar a localização, tenta novamente mais tarde !");
+        });
+      } 
+      else {
+        alert("O campo de localização não pode ser NULO, insira uma localização válida !");
+      }
+
+      $("#endereco").val("");
+    });
+
+    $(document).keypress(function (e) {
+      if (e.which == 13) {
+        $("#localizar").click();
+      }
+    });
+
+
+  } 
+  else {
+    alert('Infelizmente seu navegador não suporta geolocalização.');
   }
 
 }
