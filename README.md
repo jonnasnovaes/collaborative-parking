@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/34194789/71648859-767a9000-2ce8-11ea-9512-b61daec82bd3.png" />
+  <img src="https://user-images.githubusercontent.com/34194789/72212209-9f540f80-34b6-11ea-9ae5-8ba147571a05.png" />
 </p>
 
 # Cobollarive Parking
@@ -20,13 +20,14 @@ All plataforms.
 
 # Version
 
-* 1.0.0
+* 1.0.1
 
 # Dependences
 
 * Google Chrome: ^79.0.3945.88
 * jQuery: ^3.4.1
 * OpenLayers: 3.20.1
+* API Nominatin/OpenStreetMap
 
 # License
 
