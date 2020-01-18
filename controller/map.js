@@ -64,15 +64,29 @@ function requisitaGeoserver(map, styleFunction) {
   var vectorSource2 = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
     url: function (extent) {
-      return 'http://localhost:8080/geoserver/vagas/ows?service=WFS&' +
-        'version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&' +
-        'maxFeatures=50&outputFormat=application/json'; //&srsname=EPSG:4674&' +
+      return 'http://localhost:8080/geoserver/vagas/ows?service=WFS&'+
+      '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&'+
+      'maxFeatures=50&outputFormat=application/json'; //&srsname=EPSG:4674&' +
       //'bbox=' + extent.join(',') + ',EPSG:4674';
+
+      
     },
     serverType: 'geoserver',
     crossOrigin: 'anonymous'
     //strategy: ol.loadingstrategy.bbox
   });
+
+  /*let url = 'http://localhost:8080/geoserver/vagas/ows?service=WFS&'+
+  '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&'+
+  'maxFeatures=50&outputFormat=application/json';
+
+  var vectorSource2;
+  $.getJSON(url, function (response) {
+
+    vectorSource2 = new VectorSource({
+      features: (new GeoJSON()).readFeatures(response)
+    });
+  });*/
 
   var vector = new ol.layer.Vector({
     source: vectorSource2,
