@@ -64,12 +64,12 @@ function requisitaGeoserver(map, styleFunction) {
   var vectorSource2 = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
     url: function (extent) {
-      return 'http://localhost:8080/geoserver/vagas/ows?service=WFS&'+
-      '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&'+
-      'maxFeatures=50&outputFormat=application/json'; //&srsname=EPSG:4674&' +
+      return 'http://localhost:8080/geoserver/vagas/ows?service=WFS&' +
+        '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&' +
+        'maxFeatures=50&outputFormat=application/json'; //&srsname=EPSG:4674&' +
       //'bbox=' + extent.join(',') + ',EPSG:4674';
 
-      
+
     },
     serverType: 'geoserver',
     crossOrigin: 'anonymous'
@@ -125,12 +125,13 @@ window.onload = function () {
         var image = new ol.style.Circle({
           radius: 5,
           fill: new ol.style.Fill({
-            color: 'purple', //#ff9900 Seta a cor interna do ponto
+            //color: 'purple', //#ff9900 Seta a cor interna do ponto
+            color: '#00FF00',
             opacity: 0.6
           }),
           //color: 'purple',
           stroke: new ol.style.Stroke({
-            color: 'purple',
+            color: 'green',
             width: 1
           }) //Seta a cor da borda 
         });
@@ -230,6 +231,41 @@ window.onload = function () {
           })
         });
 
+        var select = new ol.interaction.Select({
+          style: new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 5,
+              fill: new ol.style.Fill({
+                color: '#FF0000'
+              }),
+              stroke: new ol.style.Stroke({
+                color: '#000000'
+              })
+            })
+          })
+        });
+        map.addInteraction(select);
+
+        select.on('select', function(evt){
+
+          if(evt.selected.length == 0){
+            console.info("vazio");
+          }
+          else{
+
+            //O TRECHO COMENTADO RETORNA AS COORDENADAS EXATAS DA VAGA
+            //var coord = evt.selected[0].H.geometry.B; 
+            
+            let split = evt.selected[0].f.split("vagas-point.");
+            let id = split[1];
+
+            //A requisição ajax
+            $.post("model/index.php", {id : id}, function(msg){
+              console.info(msg);
+            })
+          }
+      });
+
         //BLOCO QUE ADICIONA OS CONTROLADORES DO MAPA
         map.addControl(new ol.control.ZoomSlider());
         map.addControl(new ol.control.FullScreen());
@@ -239,7 +275,7 @@ window.onload = function () {
         /*map.addControl(new ol.control.MousePosition({
           displayProjection: 'EPSG:4326'
         }));*/
-        
+
         //ADICIONA NO MAPA O TAMANHO EM PORCENTAGEM
         $("#map").attr('Style', 'height: ' + '100' + '%; width: ' + '100' + '%;');
 
@@ -261,7 +297,27 @@ window.onload = function () {
             minZoom: 3
           });
 
-          map.setView(view);
+          map.setView(view);   
+
+          //----------
+
+          /*
+          var select = new ol.interaction.Select({
+            style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                color: '#0288D1',
+                width: 2
+              })
+            })
+          });
+          map.addInteraction(select);*/
+
+          
+          /*map.getInteractions().forEach(function (interaction) {
+            console.log("OK");
+            if(interaction instanceof ol.interaction.Select) { 
+             }
+          });*/
 
         });
 
@@ -269,6 +325,7 @@ window.onload = function () {
         requisitaGeoserver(map, styleFunction);
       }
     });
+
 
     $("#localizar").click(function () {
       var endereco = $("#endereco").val();
@@ -295,15 +352,13 @@ window.onload = function () {
             });
 
             map.setView(view);
-          } 
-          else {
+          } else {
             alert("Localização inexistente ou informada de maneira incorreta.");
           }
         }, () => {
           alert("Não foi possivel carregar a localização, tenta novamente mais tarde !");
         });
-      } 
-      else {
+      } else {
         alert("O campo de localização não pode ser NULO, insira uma localização válida !");
       }
 
@@ -317,8 +372,7 @@ window.onload = function () {
     });
 
 
-  } 
-  else {
+  } else {
     alert('Infelizmente seu navegador não suporta geolocalização.');
   }
 
