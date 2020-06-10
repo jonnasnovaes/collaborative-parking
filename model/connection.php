@@ -28,9 +28,12 @@ function db_pg()
     $parameters .= "port="     . PG_DB_PORT      . " ";
     $parameters .= "dbname="   . PG_DB_DATABASE  . " ";
     $parameters .= "user="     . PG_DB_USERNAME  . " ";
-    $parameters .= "password=" . PG_DB_PASSWORD;
+    $parameters .= "password=" . PG_DB_PASSWORD  . " ";
+    $parameters .= "options='--client_encoding=UTF8'";
 
     $connection = pg_connect($parameters) or die(pg_error());
+    //pg_query($connection, 'set client_encoding to "UTF-8"');
+
     return $connection;
 }
 

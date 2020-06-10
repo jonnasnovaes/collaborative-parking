@@ -58,42 +58,73 @@ function dadosLocalizacao(map, longitudeAtual, latitudeAtual) {
 
 //====================================================================//
 
-function requisitaGeoserver(map, styleFunction) {
+function requisitaGeoserver(map) {
 
   //O TRECHO ABAIXO FAZ A REQUISIÇÃO AO SERVIDOR E TRATA OS DADOS PARA O MAPA 
-  var vectorSource2 = new ol.source.Vector({
-    format: new ol.format.GeoJSON(),
-    url: function (extent) {
-      return 'http://localhost:8080/geoserver/vagas/ows?service=WFS&' +
-        '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&' +
-        'maxFeatures=50&outputFormat=application/json'; //&srsname=EPSG:4674&' +
-      //'bbox=' + extent.join(',') + ',EPSG:4674';
 
-
-    },
-    serverType: 'geoserver',
-    crossOrigin: 'anonymous'
-    //strategy: ol.loadingstrategy.bbox
-  });
-
-  /*let url = 'http://localhost:8080/geoserver/vagas/ows?service=WFS&'+
-  '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&'+
+  let url = 'http://localhost:8080/geoserver/vagas/ows?service=WFS&' +
+  '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&' +
   'maxFeatures=50&outputFormat=application/json';
 
-  var vectorSource2;
-  $.getJSON(url, function (response) {
+  $.getJSON(url, function(data){   
 
-    vectorSource2 = new VectorSource({
-      features: (new GeoJSON()).readFeatures(response)
-    });
-  });*/
+    var cor;
+    var textColor;
+    var status;
+    
+    for(let i = 0; i < data.features.length; i++){    
 
-  var vector = new ol.layer.Vector({
-    source: vectorSource2,
-    style: styleFunction
+      cor = null;
+      status = null;
+    
+      status = data.features[i].properties.status;
+
+      status == false ? cor = "#FF0000" : cor = "#00FF00";
+
+      //CRIA O OBJETO QUE REPRESENTARÁ AS VAGAS E A POSIÇÃO ATUAL
+      var point = new ol.style.Circle({
+        radius: 5,
+        fill: new ol.style.Fill({
+          color: cor,
+          opacity: 0.6
+        }),
+        stroke: new ol.style.Stroke({
+          color: cor,
+          width: 1
+        }) //Seta a cor da borda 
+      });
+
+      //O TRECHO ABAIXO TRATA A ESTILIZAÇÃO PARA CADA TIPO DE GEOMETRIA
+      var styles = {
+        'Point': new ol.style.Style({
+          image: point,
+        }),
+      };
+      
+      var vectorSource2 = new ol.source.Vector({});
+      var feature = new ol.Feature({});
+
+      var pointGeom = new ol.geom.Point([
+        data.features[i].geometry.coordinates[0],
+        data.features[i].geometry.coordinates[1]
+      ]);
+
+      feature.setId(data.features[i].id);    
+      feature.setProperties({'name':'', 'status':status});    
+      feature.setGeometry(pointGeom);    
+
+      vectorSource2.addFeature(feature);
+      
+      var vector = new ol.layer.Vector({
+        source: vectorSource2,
+        style: styles[feature.getGeometry().getType()]
+      });
+
+      map.addLayer(vector);
+
+    }
+
   });
-
-  map.addLayer(vector);
 
 }
 
@@ -109,104 +140,12 @@ window.onload = function () {
   //VERIFICA SE O NAVEGADOR TEM SUPORTE A GEOLOCALIZAÇÃO E CHAMA A FUNÇÃO CASO TRUE
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(function (position) {
-      //JOGAR A POSITION PARA OUTRA VARIAVEL
-      //VER UMA MANEIRA DE CARREGAR A LONGITUTE E LATITUE ATUAL NO MAPA
-      //this.longitudeAtual = position.coords.longitude;
-      //this.latitudeAtual = position.coords.latitude;
-      //this.position = position;
 
       longitudeAtual = position.coords.longitude;
       latitudeAtual = position.coords.latitude;
 
 
       if (longitudeAtual != undefined && latitudeAtual != undefined) {
-
-        //CRIA O OBJETO QUE REPRESENTARÁ AS VAGAS E A POSIÇÃO ATUAL
-        var image = new ol.style.Circle({
-          radius: 5,
-          fill: new ol.style.Fill({
-            //color: 'purple', //#ff9900 Seta a cor interna do ponto
-            color: '#00FF00',
-            opacity: 0.6
-          }),
-          //color: 'purple',
-          stroke: new ol.style.Stroke({
-            color: 'green',
-            width: 1
-          }) //Seta a cor da borda 
-        });
-
-        //O TRECHO ABAIXO TRATA A ESTILIZAÇÃO PARA CADA TIPO DE GEOMETRIA
-        var styles = {
-          'Point': new ol.style.Style({
-            image: image,
-          }),
-          'LineString': new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'green',
-              width: 1
-            })
-          }),
-          'MultiLineString': new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'green',
-              width: 1
-            })
-          }),
-          'MultiPoint': new ol.style.Style({
-            image: image
-          }),
-          'MultiPolygon': new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'yellow',
-              width: 1
-            }),
-            fill: new ol.style.Fill({
-              color: 'rgba(255, 255, 0, 0.1)'
-            })
-          }),
-          'Polygon': new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'blue',
-              lineDash: [4],
-              width: 3
-            }),
-            fill: new ol.style.Fill({
-              color: 'rgba(0, 0, 255, 0.1)'
-            })
-          }),
-          'GeometryCollection': new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'magenta',
-              width: 2
-            }),
-            fill: new ol.style.Fill({
-              color: 'magenta'
-            }),
-            image: new ol.style.Circle({
-              radius: 10,
-              fill: null,
-              stroke: new ol.style.Stroke({
-                color: 'magenta'
-              })
-            })
-          }),
-          'Circle': new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: 'red',
-              width: 2
-            }),
-            fill: new ol.style.Fill({
-              color: 'rgba(255,0,0,0.2)'
-            })
-          })
-        };
-
-        var styleFunction = function (feature) {
-          return styles[feature.getGeometry().getType()];
-        };
-
-        //=====================================================================//
 
         //O CÓDIGO CRIA O OBJETO MAP PARA SER GERENCIADO
         map = new ol.Map({
@@ -254,15 +193,21 @@ window.onload = function () {
           else{
 
             //O TRECHO COMENTADO RETORNA AS COORDENADAS EXATAS DA VAGA
-            //var coord = evt.selected[0].H.geometry.B; 
-            
+            //var coord = evt.selected[0].H.geometry.B;            
+
+            //Obtém o id da vaga
             let split = evt.selected[0].f.split("vagas-point.");
             let id = split[1];
 
-            //A requisição ajax
-            $.post("model/index.php", {id : id}, function(msg){
-              console.info(msg);
-            })
+            //Obtém o status da vaga
+            let parametro = evt.selected[0].H.status == true ? false : true;
+
+            //Requisição ajax
+            $.post("model/index.php", {id : id, parametro : parametro}, function(msg){
+              requisitaGeoserver(map);
+            });
+
+
           }
       });
 
@@ -322,7 +267,7 @@ window.onload = function () {
         });
 
         dadosLocalizacao(map, longitudeAtual, latitudeAtual);
-        requisitaGeoserver(map, styleFunction);
+        requisitaGeoserver(map);
       }
     });
 
