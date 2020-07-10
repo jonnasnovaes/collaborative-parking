@@ -262,10 +262,13 @@ window.onload = function () {
               if(id != null){
 
                 //Obtém o status da vaga
-                let parametro = evt.selected[0].H.status == true ? false : true;
+                let status = evt.selected[0].H.status == true ? false : true;
               
+                let url = 'http://localhost:3030/geoserver/ows?request=changeStatusVaga&service=statusVaga&id=';
+                url += id + '&status=' + status;
+
                 //Requisição ajax
-                $.post("model/index.php", {id : id, parametro : parametro}, function(msg){
+                $.get(url, function(msg){
                   removeVagas(map);
                   requisitaGeoserver(map);
                   select.getFeatures().clear();
@@ -325,7 +328,7 @@ window.onload = function () {
         });
 
         $("#info").click(function () {
-          window.open('./help.html');
+          window.open('view/help.html');
         });
 
         dadosLocalizacao(map, longitudeAtual, latitudeAtual);

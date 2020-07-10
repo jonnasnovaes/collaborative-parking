@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+    
     <script src="js/jquery-v3.4.1.js"></script>
     <script src="js/ol3/build/ol-debug.js"></script>
     <script src="js/ol3/build/ol.js"></script>
-    <script src="js/ol3/ol/ol/proj/proj4.js"></script>    
+    <script src="js/ol3/ol/ol/proj/proj4.js"></script>
     <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.0.1/css/ol.css">
     <script src="controller/map.js"></script>
     <script src="css/bootstrap-4.3.1/js/bootstrap.js"></script>
@@ -17,9 +17,13 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap-4.3.1/css/bootstrap.css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.0.0/css/ol.css" type="text/css">
-        <link rel="stylesheet" href="js/ol3/css/ol.css" type="text/css">
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
-        <link rel="stylesheet" type="text/css" href="css/map.css" />
+    <link rel="stylesheet" href="js/ol3/css/ol.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/map.css" />
+
+    <link rel="manifest" href="js/manifest.json">
+    <script defer src="js/sw.js"></script>
+    <script defer src="js/site.js"></script>
 
         <title>Mapeamento Colaborativo - Vagas de Estacionamento</title>
 </head>
@@ -74,7 +78,7 @@
                       <div class="md-form my-0">
                         <input class="form-control mr-sm-2 search" type="text" id="endereco" placeholder="Insira uma localização" aria-label="Search">
                         <button class="btn btn-warning" type="button" id="localizar">
-                          <img width="25" height="25" src="assets/lupa.svg" />
+                          <img width="25" height="25" src="assets/lupa.png" />
                         </button>
                         <!--<button class="btn btn-primary" type="button" id="p_atual">
                           
