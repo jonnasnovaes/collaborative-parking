@@ -24,10 +24,23 @@
     font-weight: bold;
 }
 
+.ol-full-screen > button {
+    cursor: pointer;
+}
+
+.ol-full-screen:active {
+    border: none;
+    outline: none;
+}
+
+#ct {
+    font-weight: bold;
+    color: red;
+}
+
 #endereco{
     margin-right: 100%;
 }
-
 
 @media screen and (min-width: 300px) and (max-width: 600px) {
 

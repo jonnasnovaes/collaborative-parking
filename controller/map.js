@@ -1,3 +1,62 @@
+var min = 1;
+var seg = 1
+var timeOutContador;
+function resetaContador() {
+  min = 1;
+  seg = 1;
+  window.clearTimeout(timeOutContador);
+}
+function contadorAtualizacao() {
+  
+  if((min > 0) || (seg > 0)){				
+    if(seg == 0){					
+      seg = 59;					
+      min = min - 1	
+    }				
+    else{					
+      seg = seg - 1;				
+    }				
+    if(min.toString().length == 1){					
+      min = "0" + min;				
+    }				
+    if(seg.toString().length == 1){					
+      seg = "0" + seg;				
+    }				
+    $("#ct").html(min + ":" + seg);	
+    timeOutContador = setTimeout('contadorAtualizacao()', 1000);			
+  }
+  else {
+    min = 1;
+    seg = 1;
+  }	
+	
+}
+
+function atualizaVagaTempo(map) {
+  setTimeout(function() {
+    atualizaVagas(map);
+    atualizaVagaTempo(map);
+  }, 60000);
+}
+
+function atualizaVagas(map) {
+  removeVagas(map);
+  resetaContador();
+  requisitaGeoserver(map);
+}
+
+function removeVagas(map) {
+  let layers = [];
+  map.getLayers().forEach(function (layer) {
+    layers.push(layer);
+  });
+  var len = layers.length;
+  for(var i = 2; i <= len; i++) {
+    map.removeLayer(layers[i]);
+  }
+  
+}
+
 function dadosLocalizacao(map, longitudeAtual, latitudeAtual) {
 
   //O BLOCO DE CÓDIGO ABAIXO TRATA DA SUA LOCALIZAÇÃO ATUAL NO MAPA 
@@ -62,7 +121,7 @@ function requisitaGeoserver(map) {
 
   //O TRECHO ABAIXO FAZ A REQUISIÇÃO AO SERVIDOR E TRATA OS DADOS PARA O MAPA 
 
-  let url = 'http://localhost:8080/geoserver/vagas/ows?service=WFS&' +
+  let url = 'http://localhost:3030/geoserver/vagas/ows?service=WFS&' +
   '+version=1.0.0&request=GetFeature&typeName=vagas:vagas-point&' +
   'maxFeatures=50&outputFormat=application/json';
 
@@ -82,7 +141,7 @@ function requisitaGeoserver(map) {
       status == false ? cor = "#FF0000" : cor = "#00FF00";
 
       //CRIA O OBJETO QUE REPRESENTARÁ AS VAGAS E A POSIÇÃO ATUAL
-      var point = new ol.style.Circle({
+      var point = new ol.style.Circle({ 
         radius: 5,
         fill: new ol.style.Fill({
           color: cor,
@@ -121,8 +180,10 @@ function requisitaGeoserver(map) {
       });
 
       map.addLayer(vector);
-
     }
+
+    resetaContador();
+    contadorAtualizacao();
 
   });
 
@@ -175,10 +236,10 @@ window.onload = function () {
             image: new ol.style.Circle({
               radius: 5,
               fill: new ol.style.Fill({
-                color: '#FF0000'
+                color: 'FFFF00'//'#FF0000'
               }),
               stroke: new ol.style.Stroke({
-                color: '#000000'
+                color: 'FFFF00'//'#000000'
               })
             })
           })
@@ -187,49 +248,61 @@ window.onload = function () {
 
         select.on('select', function(evt){
 
-          if(evt.selected.length == 0){
-            console.info("vazio");
-          }
-          else{
+          if(evt.selected.length == 1){
 
             //O TRECHO COMENTADO RETORNA AS COORDENADAS EXATAS DA VAGA
             //var coord = evt.selected[0].H.geometry.B;            
 
-            //Obtém o id da vaga
-            let split = evt.selected[0].f.split("vagas-point.");
-            let id = split[1];
+            if(evt.selected[0].f != null){
+              
+              //Obtém o id da vaga
+              let split = evt.selected[0].f.split("vagas-point.");
+              let id = split[1];
 
-            //Obtém o status da vaga
-            let parametro = evt.selected[0].H.status == true ? false : true;
+              if(id != null){
 
-            //Requisição ajax
-            $.post("model/index.php", {id : id, parametro : parametro}, function(msg){
-              requisitaGeoserver(map);
-            });
-
-
+                //Obtém o status da vaga
+                let parametro = evt.selected[0].H.status == true ? false : true;
+              
+                //Requisição ajax
+                $.post("model/index.php", {id : id, parametro : parametro}, function(msg){
+                  removeVagas(map);
+                  requisitaGeoserver(map);
+                  select.getFeatures().clear();
+                });
+              
+              }
+            }
           }
       });
 
         //BLOCO QUE ADICIONA OS CONTROLADORES DO MAPA
         map.addControl(new ol.control.ZoomSlider());
         map.addControl(new ol.control.FullScreen());
-        //map.addControl(new ol.control.OverviewMap());
-        //map.addControl(new ol.control.ScaleLine());
-        //map.addControl(new ol.control.Attribution());
-        /*map.addControl(new ol.control.MousePosition({
-          displayProjection: 'EPSG:4326'
-        }));*/
 
         //ADICIONA NO MAPA O TAMANHO EM PORCENTAGEM
         $("#map").attr('Style', 'height: ' + '100' + '%; width: ' + '100' + '%;');
 
         //INSERE O BOTÃO DE POSICIONAR O MAPA NA POSIÇÃO ATUAL
         $(".ol-full-screen").css("background", "none");
-        //$("#pa").remove();
-        $(".ol-full-screen").append("<button id='pa' class='navbar-brand mt-2'>" +
-          "<img id='pa' width='20' height='20' src='assets/ico-localizacao-grey.svg' />" +
+  
+        $(".ol-full-screen").append("<button id='pa' class='navbar-brand mt-2' title='Retorna a sua posição atual no mapa'>" +
+          "<img id='pa' width='20' height='20' src='assets/location.png' />" +
           "</button>");
+        
+        //INSERE O BOTÃO DE RECARREGAR AS VAGAS
+        $(".ol-full-screen").append("<button id='ld' class='navbar-brand mt-2' title='Atualiza o status das vagas'>" +
+          "<img id='ld' width='20' height='20' src='assets/loop-white.png' />" +
+          "</button>");
+
+        //INSERE O BOTÃO DE AJUDA AO USUÁRIO
+        $(".ol-full-screen").append("<button id='info' class='navbar-brand mt-2' title='Ajuda'>" +
+          "<img id='info' width='20' height='20' src='assets/info.png' />" +
+          "</button>");
+        
+          $(".ol-full-screen").append("<span id='ct' class='mt-2' title='Tempo restante para a próxima atualização'>" +
+          "00:00" +
+          "</span>");
 
         //AO CLICAR NO BOTÃO POSICIONA O MAPA NA SUA LOCALIZAÇÃO ATUAL
         $("#pa").click(function () {
@@ -244,30 +317,20 @@ window.onload = function () {
 
           map.setView(view);   
 
-          //----------
+        });
 
-          /*
-          var select = new ol.interaction.Select({
-            style: new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                color: '#0288D1',
-                width: 2
-              })
-            })
-          });
-          map.addInteraction(select);*/
+        //EXECUTA A FUNÇÃO DE ATUALIZAR AS VAGAS NO MAPA
+        $("#ld").click(function () {
+          atualizaVagas(map);
+        });
 
-          
-          /*map.getInteractions().forEach(function (interaction) {
-            console.log("OK");
-            if(interaction instanceof ol.interaction.Select) { 
-             }
-          });*/
-
+        $("#info").click(function () {
+          window.open('./help.html');
         });
 
         dadosLocalizacao(map, longitudeAtual, latitudeAtual);
         requisitaGeoserver(map);
+        atualizaVagaTempo(map);
       }
     });
 
