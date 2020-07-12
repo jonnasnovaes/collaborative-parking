@@ -53,8 +53,7 @@ function removeVagas(map) {
   var len = layers.length;
   for(var i = 2; i <= len; i++) {
     map.removeLayer(layers[i]);
-  }
-  
+  } 
 }
 
 function dadosLocalizacao(map, longitudeAtual, latitudeAtual) {
@@ -193,198 +192,203 @@ function requisitaGeoserver(map) {
 
 window.onload = function () {
 
-  var map;
+  $('#modalInfo').modal('show');
+  $('#modalInfo').on('hide.bs.modal', () => {
 
-  var longitudeAtual;
-  var latitudeAtual;
+    var map;
 
-  //VERIFICA SE O NAVEGADOR TEM SUPORTE A GEOLOCALIZAÇÃO E CHAMA A FUNÇÃO CASO TRUE
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(function (position) {
+    var longitudeAtual;
+    var latitudeAtual;
 
-      longitudeAtual = position.coords.longitude;
-      latitudeAtual = position.coords.latitude;
+    
+    //VERIFICA SE O NAVEGADOR TEM SUPORTE A GEOLOCALIZAÇÃO E CHAMA A FUNÇÃO CASO TRUE
+    if ('geolocation' in navigator) {
 
+      navigator.geolocation.getCurrentPosition(function (position) {
+        
+        longitudeAtual = position.coords.longitude;
+        latitudeAtual = position.coords.latitude;
+      
+        if (longitudeAtual != undefined && latitudeAtual != undefined) {
 
-      if (longitudeAtual != undefined && latitudeAtual != undefined) {
-
-        //O CÓDIGO CRIA O OBJETO MAP PARA SER GERENCIADO
-        map = new ol.Map({
-          layers: [
-            new ol.layer.Tile({
-              source: new ol.source.OSM()
-            }),
-          ],
-          target: 'map',
-          controls: ol.control.defaults({
-            attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
-              collapsible: false
-            }),
-
-          }),
-          view: new ol.View({
-            projection: 'EPSG:4326', //projection: 'EPSG:4326', //Aqui é definido qual o tipo de Datum - Modelo terrestre
-            //center: [-43.120243549346924, -22.895044312909466],
-            center: [longitudeAtual, latitudeAtual],
-            zoom: 18,
-            minZoom: 3
-          })
-        });
-
-        var select = new ol.interaction.Select({
-          style: new ol.style.Style({
-            image: new ol.style.Circle({
-              radius: 5,
-              fill: new ol.style.Fill({
-                color: 'FFFF00'//'#FF0000'
+          //O CÓDIGO CRIA O OBJETO MAP PARA SER GERENCIADO
+          map = new ol.Map({
+            layers: [
+              new ol.layer.Tile({
+                source: new ol.source.OSM()
               }),
-              stroke: new ol.style.Stroke({
-                color: 'FFFF00'//'#000000'
-              })
+            ],
+            target: 'map',
+            controls: ol.control.defaults({
+              attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+                collapsible: false
+              }),
+
+            }),
+            view: new ol.View({
+              projection: 'EPSG:4326', //projection: 'EPSG:4326', //Aqui é definido qual o tipo de Datum - Modelo terrestre
+              //center: [-43.120243549346924, -22.895044312909466],
+              center: [longitudeAtual, latitudeAtual],
+              zoom: 18,
+              minZoom: 3
             })
-          })
-        });
-        map.addInteraction(select);
-
-        select.on('select', function(evt){
-
-          if(evt.selected.length == 1){
-
-            //O TRECHO COMENTADO RETORNA AS COORDENADAS EXATAS DA VAGA
-            //var coord = evt.selected[0].H.geometry.B;            
-
-            if(evt.selected[0].f != null){
-              
-              //Obtém o id da vaga
-              let split = evt.selected[0].f.split("vagas-point.");
-              let id = split[1];
-
-              if(id != null){
-
-                //Obtém o status da vaga
-                let status = evt.selected[0].H.status == true ? false : true;
-              
-                let url = 'http://localhost:3030/geoserver/ows?request=changeStatusVaga&service=statusVaga&id=';
-                url += id + '&status=' + status;
-
-                //Requisição ajax
-                $.get(url, function(msg){
-                  removeVagas(map);
-                  requisitaGeoserver(map);
-                  select.getFeatures().clear();
-                });
-              
-              }
-            }
-          }
-      });
-
-        //BLOCO QUE ADICIONA OS CONTROLADORES DO MAPA
-        map.addControl(new ol.control.ZoomSlider());
-        map.addControl(new ol.control.FullScreen());
-
-        //ADICIONA NO MAPA O TAMANHO EM PORCENTAGEM
-        $("#map").attr('Style', 'height: ' + '100' + '%; width: ' + '100' + '%;');
-
-        //INSERE O BOTÃO DE POSICIONAR O MAPA NA POSIÇÃO ATUAL
-        $(".ol-full-screen").css("background", "none");
-  
-        $(".ol-full-screen").append("<button id='pa' class='navbar-brand mt-2' title='Retorna a sua posição atual no mapa'>" +
-          "<img id='pa' width='20' height='20' src='assets/location.png' />" +
-          "</button>");
-        
-        //INSERE O BOTÃO DE RECARREGAR AS VAGAS
-        $(".ol-full-screen").append("<button id='ld' class='navbar-brand mt-2' title='Atualiza o status das vagas'>" +
-          "<img id='ld' width='20' height='20' src='assets/loop-white.png' />" +
-          "</button>");
-
-        //INSERE O BOTÃO DE AJUDA AO USUÁRIO
-        $(".ol-full-screen").append("<button id='info' class='navbar-brand mt-2' title='Ajuda'>" +
-          "<img id='info' width='20' height='20' src='assets/info.png' />" +
-          "</button>");
-        
-          $(".ol-full-screen").append("<span id='ct' class='mt-2' title='Tempo restante para a próxima atualização'>" +
-          "00:00" +
-          "</span>");
-
-        //AO CLICAR NO BOTÃO POSICIONA O MAPA NA SUA LOCALIZAÇÃO ATUAL
-        $("#pa").click(function () {
-
-          let view = new ol.View({
-            projection: 'EPSG:4326',
-            //center: [-43.120243549346924, -22.895044312909466],
-            center: [longitudeAtual, latitudeAtual],
-            zoom: 18,
-            minZoom: 3
           });
 
-          map.setView(view);   
+          var select = new ol.interaction.Select({
+            style: new ol.style.Style({
+              image: new ol.style.Circle({
+                radius: 5,
+                fill: new ol.style.Fill({
+                  color: 'FFFF00'//'#FF0000'
+                }),
+                stroke: new ol.style.Stroke({
+                  color: 'FFFF00'//'#000000'
+                })
+              })
+            })
+          });
+          map.addInteraction(select);
 
+          select.on('select', function(evt){
+
+            if(evt.selected.length == 1){
+
+              //O TRECHO COMENTADO RETORNA AS COORDENADAS EXATAS DA VAGA
+              //var coord = evt.selected[0].H.geometry.B;            
+
+              if(evt.selected[0].f != null){
+                
+                //Obtém o id da vaga
+                let split = evt.selected[0].f.split("vagas-point.");
+                let id = split[1];
+
+                if(id != null){
+
+                  //Obtém o status da vaga
+                  let status = evt.selected[0].H.status == true ? false : true;
+                
+                  let url = 'http://localhost:3030/geoserver/ows?request=changeStatusVaga&service=statusVaga&id=';
+                  url += id + '&status=' + status;
+
+                  //Requisição ajax
+                  $.get(url, function(msg){
+                    removeVagas(map);
+                    requisitaGeoserver(map);
+                    select.getFeatures().clear();
+                  });
+                
+                }
+              }
+            }
         });
 
-        //EXECUTA A FUNÇÃO DE ATUALIZAR AS VAGAS NO MAPA
-        $("#ld").click(function () {
-          atualizaVagas(map);
-        });
+          //BLOCO QUE ADICIONA OS CONTROLADORES DO MAPA
+          map.addControl(new ol.control.ZoomSlider());
+          map.addControl(new ol.control.FullScreen());
 
-        $("#info").click(function () {
-          window.open('view/help.html');
-        });
+          //ADICIONA NO MAPA O TAMANHO EM PORCENTAGEM
+          $("#map").attr('Style', 'height: ' + '100' + '%; width: ' + '100' + '%;');
 
-        dadosLocalizacao(map, longitudeAtual, latitudeAtual);
-        requisitaGeoserver(map);
-        atualizaVagaTempo(map);
-      }
-    });
+          //INSERE O BOTÃO DE POSICIONAR O MAPA NA POSIÇÃO ATUAL
+          $(".ol-full-screen").css("background", "none");
+    
+          $(".ol-full-screen").append("<button id='pa' class='navbar-brand mt-2' title='Retorna a sua posição atual no mapa'>" +
+            "<img id='pa' width='20' height='20' src='assets/location.png' />" +
+            "</button>");
+          
+          //INSERE O BOTÃO DE RECARREGAR AS VAGAS
+          $(".ol-full-screen").append("<button id='ld' class='navbar-brand mt-2' title='Atualiza o status das vagas'>" +
+            "<img id='ld' width='20' height='20' src='assets/loop-white.png' />" +
+            "</button>");
 
+          //INSERE O BOTÃO DE AJUDA AO USUÁRIO
+          $(".ol-full-screen").append("<button id='info' class='navbar-brand mt-2' title='Ajuda'>" +
+            "<img id='info' width='20' height='20' src='assets/info.png' />" +
+            "</button>");
+          
+            $(".ol-full-screen").append("<span id='ct' class='mt-2' title='Tempo restante para a próxima atualização'>" +
+            "00:00" +
+            "</span>");
 
-    $("#localizar").click(function () {
-      var endereco = $("#endereco").val();
-      var tamString = endereco.length;
-
-      if (tamString > 0) {
-
-        url = "https://nominatim.openstreetmap.org/search/" + endereco + "?format=json";
-
-        $.getJSON(url, function (response) {
-          let arrayEndereco = response;
-
-          if (arrayEndereco.length != 0) {
-
-            let latitude = parseFloat(arrayEndereco[0].lat);
-            let longitude = parseFloat(arrayEndereco[0].lon);
+          //AO CLICAR NO BOTÃO POSICIONA O MAPA NA SUA LOCALIZAÇÃO ATUAL
+          $("#pa").click(function () {
 
             let view = new ol.View({
               projection: 'EPSG:4326',
               //center: [-43.120243549346924, -22.895044312909466],
-              center: [longitude, latitude],
+              center: [longitudeAtual, latitudeAtual],
               zoom: 18,
               minZoom: 3
             });
 
-            map.setView(view);
-          } else {
-            alert("Localização inexistente ou informada de maneira incorreta.");
-          }
-        }, () => {
-          alert("Não foi possivel carregar a localização, tenta novamente mais tarde !");
-        });
-      } else {
-        alert("O campo de localização não pode ser NULO, insira uma localização válida !");
-      }
+            map.setView(view);   
 
-      $("#endereco").val("");
-    });
+          });
 
-    $(document).keypress(function (e) {
-      if (e.which == 13) {
-        $("#localizar").click();
-      }
-    });
+          //EXECUTA A FUNÇÃO DE ATUALIZAR AS VAGAS NO MAPA
+          $("#ld").click(function () {
+            atualizaVagas(map);
+          });
 
+          $("#info").click(function () {
+            window.open('view/help.html');
+          });
 
-  } else {
-    alert('Infelizmente seu navegador não suporta geolocalização.');
-  }
+          dadosLocalizacao(map, longitudeAtual, latitudeAtual);
+          requisitaGeoserver(map);
+          atualizaVagaTempo(map);
+        }
+
+      });
+
+      $("#localizar").click(function () {
+        var endereco = $("#endereco").val();
+        var tamString = endereco.length;
+
+        if (tamString > 0) {
+
+          url = "https://nominatim.openstreetmap.org/search/" + endereco + "?format=json";
+
+          $.getJSON(url, function (response) {
+            let arrayEndereco = response;
+
+            if (arrayEndereco.length != 0) {
+
+              let latitude = parseFloat(arrayEndereco[0].lat);
+              let longitude = parseFloat(arrayEndereco[0].lon);
+
+              let view = new ol.View({
+                projection: 'EPSG:4326',
+                //center: [-43.120243549346924, -22.895044312909466],
+                center: [longitude, latitude],
+                zoom: 18,
+                minZoom: 3
+              });
+
+              map.setView(view);
+            } else {
+              alert("Localização inexistente ou informada de maneira incorreta.");
+            }
+          }, () => {
+            alert("Não foi possivel carregar a localização, tenta novamente mais tarde !");
+          });
+        } else {
+          alert("O campo de localização não pode ser NULO, insira uma localização válida !");
+        }
+
+        $("#endereco").val("");
+      });
+
+      $(document).keypress(function (e) {
+        if (e.which == 13) {
+          $("#localizar").click();
+        }
+      });
+
+    } else {
+      alert('Infelizmente seu navegador não suporta geolocalização.');
+    }
+
+  });
 
 }

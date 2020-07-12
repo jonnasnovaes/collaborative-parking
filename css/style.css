@@ -2,6 +2,9 @@
     margin: 0px;
     padding: 0px;
 }
+.modal-footer {
+    justify-content: flex-start !important;
+}
 .bg-color{
     /*background-color:  #563d7c;*/
     background-color:  #4590bb;

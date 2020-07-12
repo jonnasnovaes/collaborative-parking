@@ -1,0 +1,37 @@
+.img-card {
+    display: block;
+    height: 225px; 
+    width: 100%; 
+}
+
+.dot-red  {
+    filter: invert(39%) sepia(99%) saturate(7499%) hue-rotate(355deg) brightness(102%) contrast(120%);
+}
+
+.dot-green  {
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+.card-body {
+    
+}
+
+.card-text {
+    padding: 30px;
+    border-radius: 10px;
+    background-color: #4590bb;
+    color: white;
+    text-align: center;
+}
+
+.bg-light {
+    background-color: #e0e0e0 !important;
+}
+
+.jumbotron {
+    background-color: white;
+}
+
+body {
+    background-color: #e0e0e0 !important;
+}
